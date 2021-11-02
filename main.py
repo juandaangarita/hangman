@@ -2,7 +2,7 @@ import os
 import random
 
 HANGMAN = {
-"0": """
+    "0": """
  ____
 |/   |
 |    |
@@ -13,8 +13,8 @@ HANGMAN = {
 |
 |_____
 """,
-"1":
-"""
+    "1":
+        """
  ____
 |/   |
 |    |
@@ -25,8 +25,8 @@ HANGMAN = {
 |
 |_____
 """,
-"2":
-"""
+    "2":
+        """
  ____
 |/   |
 |    |
@@ -37,8 +37,8 @@ HANGMAN = {
 |
 |_____
 """,
-"3":
-"""
+    "3":
+        """
  ____
 |/   |
 |    |
@@ -49,8 +49,8 @@ HANGMAN = {
 |
 |_____
 """,
-"4":
-"""
+    "4":
+        """
  ____
 |/   |
 |    |
@@ -61,8 +61,8 @@ HANGMAN = {
 |
 |_____
 """,
-"5":
-"""
+    "5":
+        """
  ____
 |/   |
 |    |
@@ -73,8 +73,8 @@ HANGMAN = {
 |
 |_____
 """,
-"6":
-"""
+    "6":
+        """
  ____
 |/   |
 |    |
@@ -85,8 +85,8 @@ HANGMAN = {
 |
 |_____
 """,
-"7":
-"""
+    "7":
+        """
  ____
 |/   |
 |    |
@@ -99,13 +99,14 @@ HANGMAN = {
 """
 }
 
-def erase_screen():
-    os.system("cls")
+
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
 
 def welcome_print():
     print('''
-    
+
              _   _                                         
             | | | |                                        
             | |_| | __ _ _ __   __ _ _ __ ___   __ _ _ __  
@@ -115,13 +116,13 @@ def welcome_print():
                                 __/ |                      
                                |___/                       
 
-    
+
     Welcome!!! The goal of this game is to guesst the hidden word.'''
           )
     instructions()
     input('''    
     Good luck!!!
-    
+
     Press enter key to start'''
           )
 
@@ -134,53 +135,45 @@ def open_data():
 
 def open_hangpics():
     with open("./files/HANGMANPICS.txt", "r", encoding="utf-8") as f:
-        # separator = ':'
-        # pics = {}
-        # for key, value in f:
-        #     key, value = line.split(separator)
-        #     pics[key.strip()] = value.strip()
-    # with open("./files/HANGMANPICS.json", "r", encoding="utf-8") as f:
-    #     pics = json.load(f)
         pics = f
     return pics
 
 
 def choose_word(list_words):
     chosen_word = random.choice(list_words)
-    return(chosen_word.strip())
+    return chosen_word.strip()
 
 
 def game_logic(data_list):
     lifes = 7
     original_answer = choose_word(data_list).upper()
     show_answer = list("_" * len(original_answer))
-    while (lifes > 0):
-        erase_screen()
+    while lifes > 0:
+        clear()
         instructions()
         print(HANGMAN.get(str(7 - lifes)))
-        # print(original_answer)
         print(f'The word has {len(original_answer)} characters\n\n')
         print(' '.join(show_answer))
         print(f'\nYou have {lifes} lifes')
         user_answer = input('\n\nEnter just one letter: ').upper()
         if len(user_answer) > 1:
             input('\n\nRemember only enter one letter! \n\nPress enter to keep playing')
-        elif user_answer.isalpha() == False:
+        elif not user_answer.isalpha():
             input('\n\nRemember only enter alphabetic characters! \n\nPress enter to keep playing')
         elif user_answer in show_answer:
-            input(f'\n\nYou already enter the letter {user_answer}. \n\nPress enter to keep playing')                  
+            input(f'\n\nYou already enter the letter {user_answer}. \n\nPress enter to keep playing')
         elif user_answer not in original_answer:
-                lifes -= 1
-        else: 
+            lifes -= 1
+        else:
             for count, element in list(enumerate(original_answer)):
                 if user_answer == element:
                     show_answer[count] = user_answer
         if "_" not in show_answer:
-            erase_screen()
+            clear()
             print('Congratulations! You win.')
             break
         if lifes == 0:
-            erase_screen()
+            clear()
             print('Sorry you could not make it. Try again')
             print(HANGMAN.get(str(7)))
             print(f'The correct answer was: {original_answer}')
@@ -189,8 +182,7 @@ def game_logic(data_list):
     if play_again == 'Y':
         game_logic(data_list)
     elif play_again == 'N':
-        print ('Thank you for playing. Good bye')
-
+        print('Thank you for playing. Good bye')
 
 
 def instructions():
@@ -204,11 +196,10 @@ def instructions():
 
 
 def run():
-    erase_screen()
+    clear()
     welcome_print()
     data_list = open_data()
     game_logic(data_list)
-
 
 
 if __name__ == '__main__':
